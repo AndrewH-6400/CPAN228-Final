@@ -7,7 +7,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+//make a bean
 @Repository
+//extends MongoRepository, associating the Game class with GameRepository
+//Primary config associates itself with this repo and tells it and its associated classes(Game) to use primaryMongoTemplate
+//primaryMongoTemplate is configured in the PrimaryConfig to use the Games database
+//and the model Game is already associated with the collection Games giving us our through line of
+//cluster(in config) -> database(in config) -> collection(in model) -> document(queried here)
 public interface GameRepository extends MongoRepository<Game, String> {
 
 //  Query to find by title

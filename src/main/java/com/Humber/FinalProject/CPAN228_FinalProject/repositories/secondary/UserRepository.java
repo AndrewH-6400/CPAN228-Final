@@ -7,7 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+//makes a bean
 @Repository
+//UserRepository extends MongoRepository to associate the MyUser class
+//secondary config sets the cluster connection, and the database then associates those with this repository
+//while the class MyUser through @Document states the collection it belongs to
 public interface UserRepository extends MongoRepository<MyUser, String> {
 
     @Query("{ 'fname' : ?0 }")
