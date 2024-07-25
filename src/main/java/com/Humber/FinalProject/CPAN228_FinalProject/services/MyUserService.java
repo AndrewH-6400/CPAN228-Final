@@ -1,7 +1,7 @@
 package com.Humber.FinalProject.CPAN228_FinalProject.services;
 
 import com.Humber.FinalProject.CPAN228_FinalProject.models.MyUser;
-import com.Humber.FinalProject.CPAN228_FinalProject.repositories.UserRepository;
+import com.Humber.FinalProject.CPAN228_FinalProject.repositories.secondary.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

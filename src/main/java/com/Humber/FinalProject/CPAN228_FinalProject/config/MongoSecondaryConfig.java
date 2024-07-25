@@ -1,17 +1,17 @@
 package com.Humber.FinalProject.CPAN228_FinalProject.config;
 
-import com.Humber.FinalProject.CPAN228_FinalProject.repositories.UserRepository;
+import com.Humber.FinalProject.CPAN228_FinalProject.repositories.secondary.UserRepository;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.mongo.MongoProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 
@@ -19,7 +19,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackageClasses = UserRepository.class,
         mongoTemplateRef = "secondaryMongoTemplate"
 )
-@EnableConfigurationProperties
 public class MongoSecondaryConfig {
 
         @Value("${database.password}")
@@ -28,11 +27,7 @@ public class MongoSecondaryConfig {
         @Value("${database.username}")
         private String username;
 
-        @Bean(name = "secondaryProperties")
-        @ConfigurationProperties(prefix = "mongodb.secondary")
-        public MongoProperties secondaryProperties() {
-            return new MongoProperties();
-        }
+
 
         @Bean(name = "secondaryMongoClient")
         public MongoClient mongo() {
@@ -46,8 +41,15 @@ public class MongoSecondaryConfig {
         }
 
 
-        @Bean(name = "secondaryMongoTemplate")
-        public MongoTemplate mongoTemplate() throws Exception {
-            return new MongoTemplate(mongo(), "Users");
+    @Bean(name = "secondaryMongoDBFactory")
+    public MongoDatabaseFactory mongoDatabaseFactory(
+            @Qualifier("primaryMongoClient") MongoClient mongoClient) {
+        return new SimpleMongoClientDatabaseFactory(mongoClient, "Users");
+    }
+
+
+    @Bean(name = "secondaryMongoTemplate")
+        public MongoTemplate mongoTemplate(@Qualifier("secondaryMongoDBFactory")MongoDatabaseFactory mongoDatabaseFactory) throws Exception {
+            return new MongoTemplate(mongoDatabaseFactory);
         }
 }

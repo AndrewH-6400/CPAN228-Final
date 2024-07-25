@@ -1,4 +1,4 @@
-package com.Humber.FinalProject.CPAN228_FinalProject.repositories;
+package com.Humber.FinalProject.CPAN228_FinalProject.repositories.primary;
 
 import com.Humber.FinalProject.CPAN228_FinalProject.models.Game;
 import org.springframework.data.mongodb.repository.MongoRepository;

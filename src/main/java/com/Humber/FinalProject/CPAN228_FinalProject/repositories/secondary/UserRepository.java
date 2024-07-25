@@ -1,4 +1,4 @@
-package com.Humber.FinalProject.CPAN228_FinalProject.repositories;
+package com.Humber.FinalProject.CPAN228_FinalProject.repositories.secondary;
 
 import com.Humber.FinalProject.CPAN228_FinalProject.models.MyUser;
 import org.springframework.data.mongodb.repository.MongoRepository;

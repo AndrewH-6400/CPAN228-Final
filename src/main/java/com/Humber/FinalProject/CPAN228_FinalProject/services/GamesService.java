@@ -1,7 +1,7 @@
 package com.Humber.FinalProject.CPAN228_FinalProject.services;
 
 import com.Humber.FinalProject.CPAN228_FinalProject.models.Game;
-import com.Humber.FinalProject.CPAN228_FinalProject.repositories.GameRepository;
+import com.Humber.FinalProject.CPAN228_FinalProject.repositories.primary.GameRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +16,9 @@ public class GamesService {
 
     //get all
     public List<Game> getAllGames() {
-        return gamesRepository.findAll();
+        List<Game> result = gamesRepository.findAll();
+        System.out.println(result);
+        return result;
     }
 
     //get by id
