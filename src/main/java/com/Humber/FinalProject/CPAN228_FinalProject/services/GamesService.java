@@ -37,9 +37,33 @@ public class GamesService {
     }
 
     //save
+    public int saveGame(Game game){
+        // 0 for id exists, -1 for name exists. 1 for success
+        if(gamesRepository.existsById(game.getId())){
+            return 0;
+        } else if (gamesRepository.findByTitle(game.getTitle()) != null) {
+            return -1;
+        }
+        gamesRepository.save(game);
+        return 1;
 
+    }
     //update
+    public int updateGame(Game game){
+        //will most likely need more logic we will see
+        gamesRepository.save(game);
+        return 1;
+    }
 
     //delete
+    public int deleteGameById(String id){
+        //success = 1
+        gamesRepository.deleteById(id);
+        return 1;
+    }
+
+    //function to search IGDB api for a game and add it to the database
+
+
 
 }

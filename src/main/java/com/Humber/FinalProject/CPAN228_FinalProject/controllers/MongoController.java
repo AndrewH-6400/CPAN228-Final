@@ -3,6 +3,7 @@ package com.Humber.FinalProject.CPAN228_FinalProject.controllers;
 import com.Humber.FinalProject.CPAN228_FinalProject.models.Game;
 import com.Humber.FinalProject.CPAN228_FinalProject.models.MyUser;
 import com.Humber.FinalProject.CPAN228_FinalProject.services.GamesService;
+import com.Humber.FinalProject.CPAN228_FinalProject.services.IGDBService;
 import com.Humber.FinalProject.CPAN228_FinalProject.services.MyUserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +18,12 @@ public class MongoController {
     //injecting games and user services
     private final GamesService gamesService;
     private final MyUserService myUserService;
+    private final IGDBService igdbService;
 
-    public MongoController(GamesService gamesService, MyUserService myUserService) {
+    public MongoController(GamesService gamesService, MyUserService myUserService, IGDBService igdbService) {
         this.gamesService = gamesService;
         this.myUserService = myUserService;
+        this.igdbService = igdbService;
     }
 
     //get game from title
@@ -48,6 +51,16 @@ public class MongoController {
     ){
         //return list of results
         return myUserService.findByFname(fname);
+    }
+
+    @GetMapping("/get-igdb-bt")
+    public void getGameIGDB(){
+        igdbService.searchGameByTitle("Hollow Knight");
+    }
+
+    @GetMapping("/save-igdb-bt")
+    public void saveGameIGDBSave(){
+        igdbService.saveGameByTitle("Hollow Knight");
     }
 
 }
