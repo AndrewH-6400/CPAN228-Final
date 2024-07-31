@@ -53,13 +53,10 @@ public class CustomIGDBRepository {
                     .header("Accept", "application/json")
                     .body("fields "+GAME_FIELDS+"; where name = "+'"'+title+'"'+";")
                     .asJson();
-//            String rec_title = jsonResponse.getBody()
-            //JSONObject jsonObject = jsonResponse.getBody().getArray().getJSONObject(0);
+
             JSONArray jsonArray = jsonResponse.getBody().getArray();
-            //System.out.println(jsonObject.get("genres"));
             return jsonArray;
-            //System.out.println(jsonResponse.getBody().getArray().getJSONObject(0).get("summary"));
-            //System.out.println(jsonObject.getJSONArray("genres").iterator().toString());
+
         } catch (UnirestException e) {
             throw new RuntimeException(e);
         }
