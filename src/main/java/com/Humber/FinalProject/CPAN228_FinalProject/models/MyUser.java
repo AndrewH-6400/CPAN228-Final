@@ -3,8 +3,12 @@ package com.Humber.FinalProject.CPAN228_FinalProject.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import java.util.List;
 
 //lombok data and constructors
 @Data
@@ -14,10 +18,14 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @Document(collection = "UserInfo")
 public class MyUser {
     //fields can be added to or subtracted from without affecting later installments
-    //@MongoId - can be included later for annotation purposes I believe
+    @MongoId
     private String id;
+    private String password;
     private String fname;
     private String lname;
     private String email;
     private String about;
+
+    @DocumentReference
+    private List<MyUserGames> myUserGamesIDs;
 }

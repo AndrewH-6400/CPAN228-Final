@@ -1,6 +1,7 @@
 package com.Humber.FinalProject.CPAN228_FinalProject.repositories.primary;
 
 import com.Humber.FinalProject.CPAN228_FinalProject.models.Game;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;

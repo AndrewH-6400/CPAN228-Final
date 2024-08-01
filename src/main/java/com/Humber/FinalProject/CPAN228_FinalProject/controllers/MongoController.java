@@ -5,6 +5,9 @@ import com.Humber.FinalProject.CPAN228_FinalProject.models.MyUser;
 import com.Humber.FinalProject.CPAN228_FinalProject.services.GamesService;
 import com.Humber.FinalProject.CPAN228_FinalProject.services.IGDBService;
 import com.Humber.FinalProject.CPAN228_FinalProject.services.MyUserService;
+import org.bson.types.ObjectId;
+import org.json.JSONArray;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,24 +46,46 @@ public class MongoController {
         return gamesService.getAllGames();
     }
 
-    //get user from fname
-    @GetMapping("/get-uffn")
-    public List<MyUser> getUsersFromFname(
-            //request first name as param
-            @RequestParam String fname
+    //get id from game name
+    @GetMapping("/get-idfn")
+    public String getIDofGame(
+            @RequestParam String title
     ){
-        //return list of results
-        return myUserService.findByFname(fname);
+        return gamesService.getGameByTitle(title).get(0).getId().toString();
+    }
+
+    //update
+    //spring security is stopping POST requests from going through
+    @PostMapping("/update")
+    public ResponseEntity<Game> updateGame(
+            @RequestBody Game game
+    ){
+        gamesService.updateGame(game);
+        return ResponseEntity.ok().body(game);
+    }
+
+    //delete
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteGame(
+            @RequestParam String id
+    ){
+        System.out.println(id);
+        gamesService.deleteGameById(id);
+        return ResponseEntity.ok("Game Deleted");
     }
 
     @GetMapping("/get-igdb-bt")
-    public void getGameIGDB(){
-        igdbService.searchGameByTitle("Hollow Knight");
+    public JSONArray getGameIGDB(
+            @RequestParam String name
+    ){
+        return igdbService.searchGameByTitle(name);
     }
 
+    //pull information from igdb by title/name and save it to db
     @GetMapping("/save-igdb-bt")
-    public void saveGameIGDBSave(){
-        igdbService.saveGameByTitle("Hollow Knight");
+    public Game saveGameIGDBSave(
+            @RequestParam String name
+    ){
+        return igdbService.saveGameByTitle(name);
     }
-
 }

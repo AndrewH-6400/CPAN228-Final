@@ -2,6 +2,7 @@ package com.Humber.FinalProject.CPAN228_FinalProject.services;
 
 import com.Humber.FinalProject.CPAN228_FinalProject.models.Game;
 import com.Humber.FinalProject.CPAN228_FinalProject.repositories.primary.GameRepository;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,17 +41,23 @@ public class GamesService {
     public int saveGame(Game game){
         // 0 for id exists, -1 for name exists. 1 for success
         if(gamesRepository.existsById(game.getId())){
+            System.out.println("found id");
             return 0;
-        } else if (gamesRepository.findByTitle(game.getTitle()) != null) {
+        } else if (!gamesRepository.findByTitle(game.getTitle()).isEmpty()) {
+            System.out.println("found name");
             return -1;
         }
+        System.out.println("made it to save game");
         gamesRepository.save(game);
         return 1;
 
     }
     //update
     public int updateGame(Game game){
-        //will most likely need more logic we will see
+        //this will need to change from being name based to id based
+        //this will be easier when the id can be pulled from the website
+        Game tbu = gamesRepository.findByTitle(game.getTitle()).get(0);
+        game.setId(tbu.getId());
         gamesRepository.save(game);
         return 1;
     }

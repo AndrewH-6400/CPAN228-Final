@@ -1,6 +1,8 @@
 package com.Humber.FinalProject.CPAN228_FinalProject.services;
 
+import com.Humber.FinalProject.CPAN228_FinalProject.models.Game;
 import com.Humber.FinalProject.CPAN228_FinalProject.repositories.CustomIGDBRepository;
+import org.json.JSONArray;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,13 +14,15 @@ public class IGDBService {
     }
 
     //search game by title
-    public void searchGameByTitle(String title){
-        //add logic here, possible to make sure that we get no errors, format title etc...
-        customIGDBRepository.searchIGDBbyTitle(title);
+    //not working lol, but i don't even know if this is worth using
+    public JSONArray searchGameByTitle(String title){
+        //set body which is the formatting for the request
+        String body = "fields name,summary,involved_companies,genres,themes; where name = "+'"'+title+'"'+";";
+        return customIGDBRepository.searchIGDB(body,"/games");
     }
 
     //save game from igdb by title
-    public void saveGameByTitle(String title){
-        customIGDBRepository.saveIGDBbyTitle(title);
+    public Game saveGameByTitle(String title){
+        return customIGDBRepository.saveIGDBbyTitle(title);
     }
 }
