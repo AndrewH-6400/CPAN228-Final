@@ -26,5 +26,4 @@ public class Game {
     private List<String> publisher;
     private List<String> genres;
     private List<String> themes;
-
 }

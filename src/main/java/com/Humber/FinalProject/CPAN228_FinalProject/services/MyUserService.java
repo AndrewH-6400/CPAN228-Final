@@ -43,14 +43,13 @@ public class MyUserService {
     public MyUser updateUser(MyUser myUser){
 
         System.out.println(myUser.getId());
-        MyUser tempID = userRepository.findById(myUser.getId().toString()).orElse(null);
+        MyUser tempID = userRepository.findById(myUser.getId()).orElse(null);
         if (tempID != null) {
             myUser.setId(tempID.getId());
             userRepository.save(myUser);
             System.out.println("saved");
             return myUser;
         }
-
         return  myUser;
     }
 }

@@ -1,6 +1,8 @@
 package com.Humber.FinalProject.CPAN228_FinalProject.controllers;
 
 import com.Humber.FinalProject.CPAN228_FinalProject.models.MyUser;
+import com.Humber.FinalProject.CPAN228_FinalProject.models.MyUserGames;
+import com.Humber.FinalProject.CPAN228_FinalProject.services.MyUserGamesService;
 import com.Humber.FinalProject.CPAN228_FinalProject.services.MyUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +14,11 @@ import java.util.List;
 public class UserController {
 
     private final MyUserService myUserService;
+    private final MyUserGamesService myUserGamesService;
 
-    public UserController(MyUserService myUserService){
+    public UserController(MyUserService myUserService, MyUserGamesService myUserGamesService){
         this.myUserService = myUserService;
+        this.myUserGamesService = myUserGamesService;
     }
 
 
@@ -51,4 +55,12 @@ public class UserController {
         return ResponseEntity.ok(myUserService.updateUser(myUser));
     }
 
+    //save user game (ug)
+    @PostMapping("/save-ug")
+    public ResponseEntity<MyUserGames> saveUG(
+            @RequestBody MyUserGames ug
+    ){
+        myUserGamesService.saveUG(ug);
+        return ResponseEntity.ok(ug);
+    }
 }
