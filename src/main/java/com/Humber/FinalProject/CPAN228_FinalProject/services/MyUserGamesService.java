@@ -1,19 +1,23 @@
 package com.Humber.FinalProject.CPAN228_FinalProject.services;
 
+import com.Humber.FinalProject.CPAN228_FinalProject.models.MyUser;
 import com.Humber.FinalProject.CPAN228_FinalProject.models.MyUserGames;
 import com.Humber.FinalProject.CPAN228_FinalProject.repositories.secondary.UserGamesRepository;
+import com.Humber.FinalProject.CPAN228_FinalProject.repositories.secondary.UserRepository;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class MyUserGamesService {
     //injecting user games repository
     private final UserGamesRepository userGamesRepository;
-
-    public MyUserGamesService(UserGamesRepository userGamesRepository){
+    private final UserRepository userRepository;
+    public MyUserGamesService(UserGamesRepository userGamesRepository, UserRepository userRepository){
         this.userGamesRepository = userGamesRepository;
+        this.userRepository = userRepository;
     }
 
     //get all
@@ -39,13 +43,32 @@ public class MyUserGamesService {
 
     //save
     public MyUserGames saveUG(MyUserGames ug){
-        //generate object id
         if(userGamesRepository.existsById(ug.getId())){
             return null;
         }
-        ug.setId(new ObjectId().toString());
-        userGamesRepository.save(ug);
-        return ug;
+        if(userRepository.existsById(ug.getUserId())){
+            //generate usergame id
+            ug.setId(new ObjectId().toString());
+            //find user
+            MyUser user = userRepository.findById(ug.getUserId()).orElse(null);
+
+            //create game list, if user already has one set it equal to that
+            List<String> gamelist = new ArrayList<>();
+            if(user.getMyUserGamesIds() != null){
+                gamelist = user.getMyUserGamesIds();
+            }
+            //add the usergame id
+            gamelist.add(ug.getGameId());
+            //set it
+            user.setMyUserGamesIds(gamelist);
+            //save both user and usergame
+            userRepository.save(user);
+            userGamesRepository.save(ug);
+            return ug;
+        } else {
+            return null;
+        }
+
     }
 
     //update
@@ -56,8 +79,6 @@ public class MyUserGamesService {
         } else {
             return null;
         }
-
-
     }
 
     //delete
