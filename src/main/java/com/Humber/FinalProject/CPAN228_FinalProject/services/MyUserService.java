@@ -24,16 +24,19 @@ public class MyUserService {
         return userRepository.findByFname(fname);
     }
 
+    //find by id
     public MyUser findById(String id){
         return userRepository.findById(id).orElse(null);
     }
 
+    //get all users
     public List<MyUser> getAll(){
         return userRepository.findAll();
     }
 
     //no encryption here to let the front end handle encryption
     public MyUser saveUser(MyUser myUser){
+        //object ids are generated and converted to string to be saved
         myUser.setId(new ObjectId().toString());
         userRepository.save(myUser);
         return myUser;
@@ -41,9 +44,10 @@ public class MyUserService {
 
     //update user
     public MyUser updateUser(MyUser myUser){
-
-        System.out.println(myUser.getId());
+        //ensure the update is related to a user already in the database
         MyUser tempID = userRepository.findById(myUser.getId()).orElse(null);
+        //if tempID is null and no user exists by that id I would like to send an error
+        //otherwise save the user and return the new user object
         if (tempID != null) {
             myUser.setId(tempID.getId());
             userRepository.save(myUser);

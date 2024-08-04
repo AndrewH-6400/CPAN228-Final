@@ -13,6 +13,7 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
+    //injecting user service and user games service
     private final MyUserService myUserService;
     private final MyUserGamesService myUserGamesService;
 
@@ -22,7 +23,7 @@ public class UserController {
     }
 
 
-    //get user from fname
+    //get user from first name
     @GetMapping("/get-uffn")
     public ResponseEntity<List<MyUser>> getUsersFromFname(
             //request first name as param
@@ -56,6 +57,9 @@ public class UserController {
     }
 
     //save user game (ug)
+    //these are instances of a users entries to a game
+    //will hold user specific information related to the game
+    //as well as a reference to the game and the user
     @PostMapping("/save-ug")
     public ResponseEntity<MyUserGames> saveUG(
             @RequestBody MyUserGames ug

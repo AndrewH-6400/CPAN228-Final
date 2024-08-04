@@ -12,20 +12,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//For this file I need to set-up clearer endpoints as well as a search using custom queries
+//I also want to implement error handling, so that in the case that something goes wrong I can communicate that to the client
+
 //rest controller as we are only operating as a service for database integration
 @RestController
 //map requests through Database
 @RequestMapping("/Database")
 public class MongoController {
 
-    //injecting games and user services
+    //injecting games service and IGDB service as this controller will handle games
     private final GamesService gamesService;
-    private final MyUserService myUserService;
     private final IGDBService igdbService;
 
-    public MongoController(GamesService gamesService, MyUserService myUserService, IGDBService igdbService) {
+    public MongoController(GamesService gamesService, IGDBService igdbService) {
         this.gamesService = gamesService;
-        this.myUserService = myUserService;
         this.igdbService = igdbService;
     }
 
@@ -51,11 +52,10 @@ public class MongoController {
     public String getIDofGame(
             @RequestParam String title
     ){
-        return gamesService.getGameByTitle(title).get(0).getId().toString();
+        return gamesService.getGameByTitle(title).get(0).getId();
     }
 
     //update
-    //spring security is stopping POST requests from going through
     @PostMapping("/update")
     public ResponseEntity<Game> updateGame(
             @RequestBody Game game
@@ -74,6 +74,7 @@ public class MongoController {
         return ResponseEntity.ok("Game Deleted");
     }
 
+    //this will just return the exact information from igdb
     @GetMapping("/get-igdb-bt")
     public JSONArray getGameIGDB(
             @RequestParam String name
@@ -82,6 +83,8 @@ public class MongoController {
     }
 
     //pull information from igdb by title/name and save it to db
+    //this will save the information from the api by name
+    //this can be used with the one above to allow the user to look through games and pick the correct one to be saved
     @GetMapping("/save-igdb-bt")
     public Game saveGameIGDBSave(
             @RequestParam String name

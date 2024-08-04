@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 //config file
 @Configuration
 //needed as we are using multiple databases
-//base package classes associates repository and its classes(or models) with this mongo template
+//base package classes has been changed to base packages to allow for the
 @EnableMongoRepositories(basePackages = {"com.Humber.FinalProject.CPAN228_FinalProject.repositories.secondary"},
         mongoTemplateRef = "secondaryMongoTemplate"
 )

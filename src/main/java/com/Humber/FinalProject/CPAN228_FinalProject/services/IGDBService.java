@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class IGDBService {
+    //inject IGDB repo (idk if repo is the best term for this but it is what I chose)
     private final CustomIGDBRepository customIGDBRepository;
 
     public IGDBService(CustomIGDBRepository customIGDBRepository) {
@@ -14,10 +15,10 @@ public class IGDBService {
     }
 
     //search game by title
-    //not working lol, but i don't even know if this is worth using
     public JSONArray searchGameByTitle(String title){
         //set body which is the formatting for the request
         String body = "fields name,summary,involved_companies,genres,themes; where name = "+'"'+title+'"'+";";
+        //pass the correct route as well
         return customIGDBRepository.searchIGDB(body,"/games");
     }
 

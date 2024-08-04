@@ -26,6 +26,7 @@ public class MyUser {
     private String about;
     private String role;
 
+    //this may change to just holding ids but will be a list to reference all of the users game entries
     @DBRef
     private List<MyUserGames> myUserGames;
 }

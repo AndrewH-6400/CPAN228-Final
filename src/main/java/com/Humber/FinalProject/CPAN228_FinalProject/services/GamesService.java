@@ -39,6 +39,7 @@ public class GamesService {
 
     //save
     public int saveGame(Game game){
+        //this check can be edited to allow for same name games
         // 0 for id exists, -1 for name exists. 1 for success
         if(gamesRepository.existsById(game.getId())){
             System.out.println("found id");
@@ -68,9 +69,4 @@ public class GamesService {
         gamesRepository.deleteById(id);
         return 1;
     }
-
-    //function to search IGDB api for a game and add it to the database
-
-
-
 }

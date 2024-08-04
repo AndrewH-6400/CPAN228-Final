@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MyUserGamesService {
+    //injecting user games repository
     private final UserGamesRepository userGamesRepository;
 
     public MyUserGamesService(UserGamesRepository userGamesRepository){
@@ -15,6 +16,7 @@ public class MyUserGamesService {
 
     //save
     public MyUserGames saveUG(MyUserGames ug){
+        //generate object id
         ug.setId(new ObjectId().toString());
         userGamesRepository.save(ug);
         return ug;

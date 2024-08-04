@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+//this is apart of the Users database under the collection UserGames
 @Document(collection = "UserGames")
 public class MyUserGames {
     @MongoId
