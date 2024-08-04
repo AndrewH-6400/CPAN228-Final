@@ -1,8 +1,6 @@
 package com.Humber.FinalProject.CPAN228_FinalProject.controllers;
 
 import com.Humber.FinalProject.CPAN228_FinalProject.models.MyUser;
-import com.Humber.FinalProject.CPAN228_FinalProject.models.MyUserGames;
-import com.Humber.FinalProject.CPAN228_FinalProject.services.MyUserGamesService;
 import com.Humber.FinalProject.CPAN228_FinalProject.services.MyUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +13,9 @@ public class UserController {
 
     //injecting user service and user games service
     private final MyUserService myUserService;
-    private final MyUserGamesService myUserGamesService;
 
-    public UserController(MyUserService myUserService, MyUserGamesService myUserGamesService){
+    public UserController(MyUserService myUserService){
         this.myUserService = myUserService;
-        this.myUserGamesService = myUserGamesService;
     }
 
 
@@ -75,17 +71,5 @@ public class UserController {
         } else {
             return ResponseEntity.ok("User Not Found");
         }
-    }
-
-    //save user game (ug)
-    //these are instances of a users entries to a game
-    //will hold user specific information related to the game
-    //as well as a reference to the game and the user
-    @PostMapping("/save-ug")
-    public ResponseEntity<MyUserGames> saveUG(
-            @RequestBody MyUserGames ug
-    ){
-        myUserGamesService.saveUG(ug);
-        return ResponseEntity.ok(ug);
     }
 }

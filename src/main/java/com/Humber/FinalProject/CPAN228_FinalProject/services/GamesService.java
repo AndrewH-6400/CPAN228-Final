@@ -57,10 +57,12 @@ public class GamesService {
     public int updateGame(Game game){
         //this will need to change from being name based to id based
         //this will be easier when the id can be pulled from the website
-        Game tbu = gamesRepository.findByTitle(game.getTitle()).get(0);
-        game.setId(tbu.getId());
-        gamesRepository.save(game);
-        return 1;
+        if(getGameById(game.getId()) != null){
+            gamesRepository.save(game);
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     //delete

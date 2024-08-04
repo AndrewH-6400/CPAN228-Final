@@ -47,6 +47,19 @@ public class MongoController {
         return gamesService.getAllGames();
     }
 
+    //get game by id
+    @GetMapping("/get-gid")
+    public ResponseEntity<Game> getGameById(
+            @RequestParam String id
+    ) {
+        Game game = gamesService.getGameById(id);
+        if(game != null){
+            return ResponseEntity.ok(game);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     //get id from game name
     @GetMapping("/get-idfn")
     public String getIDofGame(
@@ -60,8 +73,12 @@ public class MongoController {
     public ResponseEntity<Game> updateGame(
             @RequestBody Game game
     ){
-        gamesService.updateGame(game);
-        return ResponseEntity.ok().body(game);
+        int res = gamesService.updateGame(game);
+        if(res == 1){
+            return ResponseEntity.ok().body(game);
+        } else {
+            return ResponseEntity.badRequest().body(game);
+        }
     }
 
     //delete
@@ -69,9 +86,13 @@ public class MongoController {
     public ResponseEntity<String> deleteGame(
             @RequestParam String id
     ){
-        System.out.println(id);
-        gamesService.deleteGameById(id);
-        return ResponseEntity.ok("Game Deleted");
+        int res = gamesService.deleteGameById(id);
+        if(res == 1){
+            return ResponseEntity.ok("Game Deleted");
+        } else {
+            return ResponseEntity.badRequest().body("Game Not Found");
+        }
+
     }
 
     //this will just return the exact information from igdb
@@ -90,5 +111,11 @@ public class MongoController {
             @RequestParam String name
     ){
         return igdbService.saveGameByTitle(name);
+    }
+
+    //go through EACH document and check if any fields are null, if they are update the game by title
+    @GetMapping("/update-all")
+    public void udpateAllGames(){
+        igdbService.updateByIGDB();
     }
 }

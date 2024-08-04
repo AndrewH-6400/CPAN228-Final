@@ -36,7 +36,7 @@ public class CustomIGDBRepository {
     //igdb url
     private final String IGDB_URl = "https://api.igdb.com/v4";
     //these are the fields that we are using for our games model
-    private final String GAME_FIELDS = "name,summary,involved_companies,genres,themes";
+    private final String GAME_FIELDS = "name,summary,involved_companies,genres,themes,cover";
 
     //this is the main method that will be used by others to pull game information
     //a body that will define the search term, and the fields to be returned
@@ -88,12 +88,19 @@ public class CustomIGDBRepository {
         String company = searchIGDB(body,"/companies").getJSONObject(0).get("name").toString();
 
         return Arrays.asList(company,isDev,isPub);
+    }
 
+    //get and return the height width and url for the cover of the video game
+    public List<String> searchIDGBCover(int coverID){
+        String body = "fields height,width,url; where id = "+coverID+";";
+        JSONObject jsonObject = searchIGDB(body, "/covers").getJSONObject(0);
+        return Arrays.asList(jsonObject.get("height").toString(),jsonObject.get("width").toString(),jsonObject.get("url").toString());
     }
 
     //save the game
     //this will use some of the smaller methods (genre id to name) to find user readable information to save to the database
-    public Game saveIGDBbyTitle(String title) {
+    //the id field can be null, if it is null an id is generated otherwise this is an update method
+    public Game saveIGDBbyTitle(String title, String id) {
         //new game object to populate
         Game game = new Game();
         //call the api using a title and take the first option given
@@ -132,8 +139,12 @@ public class CustomIGDBRepository {
                 pubs.add(res.get(0));
             }
         }
-        //generate new object id and convert it to a string
-        game.setId(new ObjectId().toString());
+        //get the cover information and add it to the list cover
+        //there will only ever be one cover so not much is needed
+        List<String> cover = searchIDGBCover((Integer) jsonObject.get("cover"));
+
+
+
         //the title is given from the original call and just needs to be retrieved
         game.setTitle(jsonObject.get("name").toString());
         //summary also just needs to be retrieved from jsonObject
@@ -143,9 +154,22 @@ public class CustomIGDBRepository {
         game.setThemes(theme);
         game.setDeveloper(devs);
         game.setPublisher(pubs);
-        System.out.println(game);
+        game.setCover(cover);
+
+
+        if (id == null){
+            //generate new object id and convert it to a string
+            //then save
+            game.setId(new ObjectId().toString());
+            System.out.println(game);
+            gamesService.saveGame(game);
+        } else {
+            //use update to overwrite existing documents
+            game.setId(id);
+            gamesService.updateGame(game);
+        }
         //save the game
-        gamesService.saveGame(game);
+
         //return it
         return game;
     }

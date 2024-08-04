@@ -23,7 +23,11 @@ public class Game {
     private String title;
     private String description;
     private List<String> developer;
+    //if this field is empty then the dev is the publisher
     private List<String> publisher;
     private List<String> genres;
     private List<String> themes;
+    //a list that holds the height(in pixels), width(also pixels), and url of the cover
+    //use the height and width to size the cover properly
+    private List<String> cover;
 }
