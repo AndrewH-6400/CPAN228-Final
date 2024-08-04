@@ -33,6 +33,14 @@ public class UserController {
         return ResponseEntity.ok().body(myUserService.findByFname(fname));
     }
 
+    //get user from id
+    @GetMapping("/get-ufid")
+    public ResponseEntity<MyUser> getUserFromID(
+            @RequestParam String id
+    ){
+        return ResponseEntity.ok(myUserService.findById(id));
+    }
+
     //get all users
     @GetMapping("/get-all")
     public List<MyUser> getAllUsers(){
@@ -54,6 +62,19 @@ public class UserController {
             @RequestBody MyUser myUser
     ){
         return ResponseEntity.ok(myUserService.updateUser(myUser));
+    }
+
+    //delete user
+    @DeleteMapping("/delete-user")
+    public ResponseEntity<String> deleteUser(
+            @RequestParam String id
+    ){
+        int res = myUserService.deleteUser(id);
+        if(res == 1){
+            return ResponseEntity.ok("User Deleted");
+        } else {
+            return ResponseEntity.ok("User Not Found");
+        }
     }
 
     //save user game (ug)

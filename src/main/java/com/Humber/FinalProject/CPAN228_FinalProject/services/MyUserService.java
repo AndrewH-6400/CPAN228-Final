@@ -26,7 +26,9 @@ public class MyUserService {
 
     //find by id
     public MyUser findById(String id){
-        return userRepository.findById(id).orElse(null);
+        MyUser user = userRepository.findById(id).orElse(null);
+        System.out.println(user);
+        return user;
     }
 
     //get all users
@@ -55,5 +57,17 @@ public class MyUserService {
             return myUser;
         }
         return  myUser;
+    }
+
+    //delete user
+    //1 success 0 error
+    public int deleteUser(String id){
+        MyUser user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            userRepository.delete(user);
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }
