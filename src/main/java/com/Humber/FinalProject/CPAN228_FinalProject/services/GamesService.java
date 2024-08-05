@@ -2,7 +2,6 @@ package com.Humber.FinalProject.CPAN228_FinalProject.services;
 
 import com.Humber.FinalProject.CPAN228_FinalProject.models.Game;
 import com.Humber.FinalProject.CPAN228_FinalProject.repositories.primary.GameRepository;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,12 +28,6 @@ public class GamesService {
     public Game getGameById(String id){
         //custom query
         return gamesRepository.findById(id).orElse(null);
-    }
-
-    //get by name
-    //return list of games as title is not unique and multiple documents may match
-    public List<Game> getGameByTitle(String title){
-        return gamesRepository.findByTitle(title);
     }
 
     //save
@@ -70,5 +63,10 @@ public class GamesService {
         //success = 1
         gamesRepository.deleteById(id);
         return 1;
+    }
+
+    //search by title
+    public List<Game> searchGame(String title){
+        return gamesRepository.findByTitleContaining(title);
     }
 }

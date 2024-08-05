@@ -30,14 +30,9 @@ public class MongoController {
         this.igdbService = igdbService;
     }
 
-    //get game from title
-    @GetMapping("/get-gft")
-    public List<Game> getGamesFromTitle(
-            //request title as param (url/get-gft?title=Title to be searched)
-            @RequestParam String title
-    ){
-        //return the list of matches
-        return gamesService.getGameByTitle(title);
+    @GetMapping("/search")
+    public ResponseEntity<List<Game>> searchGames(@RequestParam String title){
+        return ResponseEntity.ok().body(gamesService.searchGame(title));
     }
 
     //get all games
@@ -58,14 +53,6 @@ public class MongoController {
         } else {
             return ResponseEntity.badRequest().build();
         }
-    }
-
-    //get id from game name
-    @GetMapping("/get-idfn")
-    public String getIDofGame(
-            @RequestParam String title
-    ){
-        return gamesService.getGameByTitle(title).get(0).getId();
     }
 
     //update
