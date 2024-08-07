@@ -162,14 +162,14 @@ public class CustomIGDBRepository {
             //then save
             game.setId(new ObjectId().toString());
             System.out.println(game);
+            //save the game
             gamesService.saveGame(game);
         } else {
             //use update to overwrite existing documents
             game.setId(id);
+            //update the game
             gamesService.updateGame(game);
         }
-        //save the game
-
         //return it
         return game;
     }

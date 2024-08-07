@@ -1,12 +1,8 @@
 package com.Humber.FinalProject.CPAN228_FinalProject.controllers;
 
 import com.Humber.FinalProject.CPAN228_FinalProject.models.Game;
-import com.Humber.FinalProject.CPAN228_FinalProject.models.MyUser;
 import com.Humber.FinalProject.CPAN228_FinalProject.services.GamesService;
 import com.Humber.FinalProject.CPAN228_FinalProject.services.IGDBService;
-import com.Humber.FinalProject.CPAN228_FinalProject.services.MyUserService;
-import org.bson.types.ObjectId;
-import org.json.JSONArray;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,16 +26,29 @@ public class MongoController {
         this.igdbService = igdbService;
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<Game>> searchGames(@RequestParam String title){
-        return ResponseEntity.ok().body(gamesService.searchGame(title));
+    //true search
+    //use to show the admin the list of games they can choose from
+    //save function is specific to the name of the game, so you must input the proper name
+    @GetMapping("/search-igdb")
+    public ResponseEntity<String> searchGames(@RequestParam String search){
+
+        String results = igdbService.trueSearch(search).toString();
+        if(results.isEmpty()){
+            return ResponseEntity.badRequest().body("No results found");
+        }
+        return ResponseEntity.ok().body(results);
     }
 
     //get all games
     @GetMapping("/get-all")
-    public List<Game> getAllGames(){
+    public ResponseEntity<List<Game>> getAllGames(){
         //return list of matches
-        return gamesService.getAllGames();
+        List<Game> games = gamesService.getAllGames();
+        if(games.isEmpty()){
+            return ResponseEntity.badRequest().header("Error","Error Finding Games").body(null);
+        } else {
+            return ResponseEntity.ok().body(games);
+        }
     }
 
     //get game by id
@@ -51,7 +60,7 @@ public class MongoController {
         if(game != null){
             return ResponseEntity.ok(game);
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().header("Error","Invalid Game ID").body(null);
         }
     }
 
@@ -64,7 +73,7 @@ public class MongoController {
         if(res == 1){
             return ResponseEntity.ok().body(game);
         } else {
-            return ResponseEntity.badRequest().body(game);
+            return ResponseEntity.badRequest().header("Error","Invalid Game ID").body(null);
         }
     }
 
@@ -84,25 +93,31 @@ public class MongoController {
 
     //this will just return the exact information from igdb
     @GetMapping("/get-igdb-bt")
-    public JSONArray getGameIGDB(
+    public ResponseEntity<String> getGameIGDB(
             @RequestParam String name
     ){
-        return igdbService.searchGameByTitle(name);
+        String results = igdbService.searchGameByTitle(name).toString();
+        if(results.isEmpty()){
+            return ResponseEntity.badRequest().body("Game Not Found");
+        } else {
+            return ResponseEntity.ok(results);
+        }
     }
 
     //pull information from igdb by title/name and save it to db
     //this will save the information from the api by name
     //this can be used with the one above to allow the user to look through games and pick the correct one to be saved
     @GetMapping("/save-igdb-bt")
-    public Game saveGameIGDBSave(
+    public ResponseEntity<Game> saveGameIGDBSave(
             @RequestParam String name
     ){
-        return igdbService.saveGameByTitle(name);
+        return ResponseEntity.ok(igdbService.saveGameByTitle(name));
     }
 
     //go through EACH document and check if any fields are null, if they are update the game by title
+    //has no output as this will only output things for the terminal on the server end
     @GetMapping("/update-all")
-    public void udpateAllGames(){
+    public void updateAllGames(){
         igdbService.updateByIGDB();
     }
 }

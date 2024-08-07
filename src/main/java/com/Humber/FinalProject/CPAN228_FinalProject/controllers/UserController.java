@@ -26,6 +26,10 @@ public class UserController {
             @RequestParam String fname
     ){
         //return list of results
+        List<MyUser> results = myUserService.findByFname(fname);
+        if (results.isEmpty()){
+            return ResponseEntity.badRequest().header("Error", "User not found").body(null);
+        }
         return ResponseEntity.ok().body(myUserService.findByFname(fname));
     }
 
@@ -34,7 +38,12 @@ public class UserController {
     public ResponseEntity<MyUser> getUserFromID(
             @RequestParam String id
     ){
-        return ResponseEntity.ok(myUserService.findById(id));
+        MyUser results = myUserService.findById(id);
+        if (results == null){
+            return ResponseEntity.badRequest().header("Error", "Invalid ID").body(null);
+        } else {
+            return ResponseEntity.ok(results);
+        }
     }
 
     //get all users
@@ -57,7 +66,13 @@ public class UserController {
     public ResponseEntity<MyUser> updateUser(
             @RequestBody MyUser myUser
     ){
-        return ResponseEntity.ok(myUserService.updateUser(myUser));
+        MyUser updatedUser = myUserService.updateUser(myUser);
+        if (updatedUser == null){
+            return ResponseEntity.badRequest().header("Error", "Invalid ID").body(null);
+        } else {
+            return ResponseEntity.ok(updatedUser);
+        }
+
     }
 
     //delete user

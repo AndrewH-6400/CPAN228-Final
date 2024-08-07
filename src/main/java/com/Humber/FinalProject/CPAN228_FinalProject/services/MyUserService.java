@@ -21,7 +21,7 @@ public class MyUserService {
     //return list as fist name is not unique
     public List<MyUser> findByFname(String fname) {
         //uses custom query
-        return userRepository.findByFname(fname);
+        return userRepository.findByFnameContaining(fname);
     }
 
     //find by id
@@ -56,7 +56,7 @@ public class MyUserService {
             System.out.println("saved");
             return myUser;
         }
-        return  myUser;
+        return  null;
     }
 
     //delete user

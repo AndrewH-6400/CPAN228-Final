@@ -43,9 +43,6 @@ public class MyUserGamesService {
 
     //save
     public MyUserGames saveUG(MyUserGames ug){
-        if(userGamesRepository.existsById(ug.getId())){
-            return null;
-        }
         if(userRepository.existsById(ug.getUserId())){
             //generate usergame id
             ug.setId(new ObjectId().toString());

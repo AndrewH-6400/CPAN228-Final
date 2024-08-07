@@ -21,6 +21,7 @@ public class UserGameController {
     //get all
     @GetMapping("/get-all")
     public ResponseEntity<List<MyUserGames>> getAllUserGames() {
+        //no error handling as returning an empty list is fine
         return ResponseEntity.ok(myUserGamesService.getAllUserGames());
     }
 
@@ -33,7 +34,7 @@ public class UserGameController {
         if(res != null){
             return ResponseEntity.ok(res);
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().header("Error", "User game not found").body(null);
         }
     }
 
@@ -47,7 +48,7 @@ public class UserGameController {
         if(res != null){
             return ResponseEntity.ok(res);
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().header("Error","No Matching User Game").build();
         }
     }
 
@@ -60,7 +61,7 @@ public class UserGameController {
         if(userGames != null){
             return ResponseEntity.ok(userGames);
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().header("Error","Invalid User ID").build();
         }
     }
 
@@ -73,8 +74,12 @@ public class UserGameController {
             @RequestBody MyUserGames ug
     ){
         ug.setId(new ObjectId().toString());
-        myUserGamesService.saveUG(ug);
-        return ResponseEntity.ok(ug);
+        MyUserGames response = myUserGamesService.saveUG(ug);
+        if(response == null){
+            return ResponseEntity.badRequest().header("Error", "Invalid User ID").body(null);
+        } else {
+            return ResponseEntity.ok(response);
+        }
     }
 
     //update
@@ -85,7 +90,7 @@ public class UserGameController {
         if (myUserGamesService.updateUG(ug) != null){
             return ResponseEntity.ok(ug);
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().header("Error","Invalid ID").body(null);
         }
     }
 
@@ -97,7 +102,7 @@ public class UserGameController {
         if(myUserGamesService.deleteUG(userGameId) == 1){
             return ResponseEntity.ok(myUserGamesService.getById(userGameId));
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().header("Error","Invalid ID").build();
         }
     }
 }

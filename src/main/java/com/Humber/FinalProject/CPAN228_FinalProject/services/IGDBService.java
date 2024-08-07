@@ -4,7 +4,6 @@ import com.Humber.FinalProject.CPAN228_FinalProject.models.Game;
 import com.Humber.FinalProject.CPAN228_FinalProject.repositories.CustomIGDBRepository;
 import org.json.JSONArray;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 
 @Service
@@ -23,7 +22,16 @@ public class IGDBService {
         //set body which is the formatting for the request
         String body = "fields name,summary,involved_companies,genres,themes,cover; where name = "+'"'+title+'"'+";";
         //pass the correct route as well
-        return customIGDBRepository.searchIGDB(body,"/games");
+        JSONArray jsonArray = customIGDBRepository.searchIGDB(body,"/games");
+        System.out.println("Service Success");
+
+        return jsonArray;
+    }
+
+    //actually return a list of search
+    public JSONArray trueSearch(String search){
+        String body = "fields name; search "+'"'+search+'"'+"; limit 50;";
+        return customIGDBRepository.searchIGDB(body,"/search");
     }
 
     //save game from igdb by title
