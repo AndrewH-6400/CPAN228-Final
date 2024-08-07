@@ -39,6 +39,19 @@ public class MongoController {
         return ResponseEntity.ok().body(results);
     }
 
+    //search the database
+    @GetMapping("/search")
+    public ResponseEntity<List<Game>> searchDBGame(
+            @RequestParam String search
+    ){
+        List<Game> results = gamesService.searchGame(search);
+        if(results.isEmpty()) {
+            return ResponseEntity.badRequest().header("Error", "No Results").body(results);
+        } else {
+            return ResponseEntity.ok().body(results);
+        }
+    }
+
     //get all games
     @GetMapping("/get-all")
     public ResponseEntity<List<Game>> getAllGames(){

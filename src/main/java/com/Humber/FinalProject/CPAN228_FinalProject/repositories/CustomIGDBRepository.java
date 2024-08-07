@@ -94,7 +94,7 @@ public class CustomIGDBRepository {
     public List<String> searchIDGBCover(int coverID){
         String body = "fields height,width,url; where id = "+coverID+";";
         JSONObject jsonObject = searchIGDB(body, "/covers").getJSONObject(0);
-        return Arrays.asList(jsonObject.get("height").toString(),jsonObject.get("width").toString(),jsonObject.get("url").toString());
+        return Arrays.asList(jsonObject.get("height").toString(),jsonObject.get("width").toString(),jsonObject.get("url").toString().replace("t_thumb","t_1080p"));
     }
 
     //save the game
