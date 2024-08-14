@@ -31,6 +31,12 @@ public class MyUserService {
         return user;
     }
 
+    //find by username
+    public MyUser findByUsername(String username){
+        MyUser user = userRepository.findByUsername(username).orElse(null);
+        return user;
+    }
+
     //get all users
     public List<MyUser> getAll(){
         return userRepository.findAll();

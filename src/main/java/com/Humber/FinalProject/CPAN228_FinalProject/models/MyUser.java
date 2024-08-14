@@ -23,6 +23,7 @@ public class MyUser {
     private String fname;
     private String lname;
     private String email;
+    private String username;
     private String about;
     private String role;
 

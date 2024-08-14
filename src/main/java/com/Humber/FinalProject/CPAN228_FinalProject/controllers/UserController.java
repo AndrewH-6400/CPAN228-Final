@@ -46,6 +46,21 @@ public class UserController {
         }
     }
 
+    //get user from username
+    @GetMapping("/get-ufu")
+    public ResponseEntity<MyUser> getUserFromUsername(
+            @RequestParam String username
+    ){
+        MyUser result = myUserService.findByUsername(username);
+        if (result == null){
+            return ResponseEntity.badRequest().header("Error", "User not found").body(null);
+        } else {
+            return ResponseEntity.ok(result);
+        }
+
+
+    }
+
     //get all users
     @GetMapping("/get-all")
     public List<MyUser> getAllUsers(){
